@@ -4,9 +4,9 @@
     </div>
 </template>
 
+
 <style scoped>
 div{
-    width: 70%;
-
+    width:100%;
 }
 </style>
