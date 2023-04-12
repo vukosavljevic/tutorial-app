@@ -22,6 +22,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+
 app.get('/tutorials', (req, res) => {
   pool.query('SELECT * FROM tutorial', (error, results, fields) => {
     if (error) throw error;
@@ -36,11 +37,34 @@ app.get('/tutorials/:id', (req, res) => {
   });
 });
 
-app.post('/tutorials', (req, res) => {
-  const { title, description } = req.body;
+app.get('/users', (req, res) => {
+  pool.query('SELECT * FROM users', (error, results, fields) => {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
+app.post('/users', (req, res) => {
+  const name = req.body.name;
+  const password = req.body.password;
   pool.query(
-    'INSERT INTO tutorial (title, description) VALUES (?, ?)',
-    [title, description],
+    'INSERT INTO users (name, password) VALUES (?, ?)',
+    [name, password],
+    (error, results, fields) => {
+      if (error) throw error;
+      res.status(201).json({ message: 'things added successfully' });
+    }
+  );
+});
+
+
+app.post('/tutorials', (req, res) => {
+  const title = req.body.title;
+  const description = req.body.description;
+  const filename = req.body.file;
+  pool.query(
+    'INSERT INTO tutorial (title, description, video) VALUES (?, ?, ?)',
+    [title, description, filename],
     (error, results, fields) => {
       if (error) throw error;
       res.status(201).json({ message: 'things added successfully' });
